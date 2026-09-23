@@ -1,0 +1,6 @@
+{
+  "name": "Anonimus Letter",
+  "description": "Maxfiy bir martalik xat, vintage detektiv dosye va ikki tomonlama anonim chat platformasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

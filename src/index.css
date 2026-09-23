@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0d0e11;
+    color: #e4dac7;
+  }
+
+  h1, h2, h3, .font-serif-vintage {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .font-case {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.12em;
+  }
+
+  .font-typewriter {
+    font-family: 'Special Elite', 'Courier Prime', monospace;
+  }
+
+  .font-dossier-code {
+    font-family: 'Courier Prime', monospace;
+  }
+
+  .font-handwritten-ink {
+    font-family: 'Caveat', 'Marck Script', cursive;
+    letter-spacing: 0.03em;
+  }
+}
+
+/* Anti-Screenshot Micro-Watermark pattern */
+.anti-screenshot-watermark {
+  background-image: radial-gradient(rgba(180, 140, 60, 0.08) 1px, transparent 0),
+    repeating-linear-gradient(-45deg, rgba(160, 120, 50, 0.04) 0, rgba(160, 120, 50, 0.04) 1px, transparent 1px, transparent 60px);
+}
+
+/* Vintage Paper & Leather Textures */
+.texture-leather {
+  background-color: #17181c;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(35, 37, 44, 0.4) 0%, rgba(13, 14, 17, 0.8) 100%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 2px, transparent 2px, transparent 4px);
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.85);
+}
+
+.texture-aged-paper {
+  background-color: #dfceb1;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(245, 237, 222, 0.9) 0%, rgba(206, 185, 149, 0.95) 100%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 3px);
+  color: #241e17;
+  box-shadow: 2px 4px 14px rgba(0,0,0,0.35);
+}
+
+.texture-kraft-paper {
+  background-color: #c9b48f;
+  background-image: 
+    radial-gradient(circle at 30% 20%, rgba(220, 201, 166, 0.7) 0%, rgba(179, 155, 116, 0.9) 100%),
+    repeating-linear-gradient(35deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 4px);
+  color: #2a2016;
+}
+
+.texture-card-dark {
+  background-color: #16181d;
+  background-image: radial-gradient(circle at top right, rgba(40, 44, 54, 0.3) 0%, rgba(18, 20, 24, 0.8) 100%);
+  border: 1px solid rgba(200, 157, 86, 0.15);
+}
+
+/* Red stamp ink effect */
+.stamp-red {
+  color: #c94444;
+  border: 2px solid #c94444;
+  opacity: 0.88;
+  letter-spacing: 0.18em;
+  transform: rotate(-3deg);
+  display: inline-block;
+  text-shadow: 0 0 1px rgba(201, 68, 68, 0.4);
+}
+
+/* Gold foil / brass details */
+.brass-glow {
+  background: linear-gradient(135deg, #dfbd74 0%, #a47c34 50%, #e8cc8c 100%);
+  color: #1b1306;
+  box-shadow: 0 2px 10px rgba(180, 134, 52, 0.35), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.brass-border {
+  border-color: #b58d44;
+}
+
+/* Dust blowing animation for archive photos */
+@keyframes dustFly {
+  0% {
+    opacity: 0.9;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx, 30px), var(--ty, -40px)) scale(0.2);
+  }
+}
+
+.animate-dust-particle {
+  animation: dustFly 0.65s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+/* Paper Burning & Ash Dissolve Animation */
+@keyframes burnFlame {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 0 rgba(255, 69, 0, 0));
+    opacity: 1;
+    transform: scale(1);
+  }
+  30% {
+    filter: brightness(1.8) contrast(1.5) drop-shadow(0 -10px 30px rgba(255, 69, 0, 0.9));
+  }
+  65% {
+    filter: brightness(0.4) contrast(2) sepia(1) hue-rotate(-50deg);
+    opacity: 0.85;
+    clip-path: polygon(0 40%, 100% 20%, 90% 100%, 10% 90%);
+  }
+  100% {
+    filter: brightness(0.05);
+    opacity: 0;
+    transform: translateY(-20px) scale(0.85);
+  }
+}
+
+.animate-paper-burn {
+  animation: burnFlame 2.2s ease-in forwards;
+}
+
+/* Custom Scrollbar for vintage dossiers */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #121316;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a3224;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c89d56;
+}
+
+/* Atmospheric Noir Breathing Light (Jonli va sirli yonib-o'chuvchi nur effekti) */
+@keyframes noirBreathingGlow {
+  0%, 100% {
+    opacity: 0.22;
+    transform: scale(0.96) translate3d(0, 0, 0);
+    filter: blur(50px);
+  }
+  50% {
+    opacity: 0.48;
+    transform: scale(1.06) translate3d(0, -4px, 0);
+    filter: blur(70px);
+  }
+}
+
+@keyframes ambientPaperFlicker {
+  0%, 100% {
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.85), 0 0 20px rgba(202, 160, 75, 0.06);
+  }
+  50% {
+    box-shadow: inset 0 0 65px rgba(0,0,0,0.75), 0 0 45px rgba(202, 160, 75, 0.22);
+  }
+}
+
+@keyframes inkStampSlam {
+  0% {
+    opacity: 0;
+    transform: scale(2.2) rotate(-8deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(0.95) rotate(-3deg);
+  }
+  100% {
+    opacity: 0.92;
+    transform: scale(1) rotate(-3deg);
+  }
+}
+
+.animate-noir-breathing {
+  animation: noirBreathingGlow 5.5s ease-in-out infinite;
+}
+
+.animate-paper-flicker {
+  animation: ambientPaperFlicker 6s ease-in-out infinite;
+}
+
+.animate-ink-stamp {
+  animation: inkStampSlam 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+}
+
+/* Incoming Message Smooth Slide-In Animation (0.3s pastdan tepaga qarab yumshoq harakat) */
+@keyframes messageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-message-slide-in {
+  animation: messageSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Passive Scroll-Locking & Overscroll Containment on Touch Devices */
+body.dossier-touch-active {
+  overscroll-behavior-y: none;
+}
+
+.dossier-scroll-lock {
+  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
