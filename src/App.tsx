@@ -33,10 +33,19 @@ export default function App() {
   });
 
   const [activeRole, setActiveRole] = useState<'recipient' | 'author'>('recipient');
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   // Save changes to localStorage
   useEffect(() => {
-    localStorage.setItem('anonimus_letter_dossier_v3', JSON.stringify(dossier));
+    try {
+      localStorage.setItem('anonimus_letter_dossier_v3', JSON.stringify(dossier));
+      if (saveError) setSaveError(null);
+    } catch (err) {
+      console.error('Dosyeni saqlashda xatolik:', err);
+      setSaveError(
+        'Dosye juda katta bo\'lib qoldi va saqlanmadi (masalan katta fotosurat sabab bo\'lishi mumkin). Iltimos kichikroq rasm biriktiring yoki eski xabarlarni tozalang.'
+      );
+    }
   }, [dossier]);
 
   // Handle sending new message with lifecycle stamps & @secret / @super_secret options
@@ -108,7 +117,7 @@ export default function App() {
       ...prev,
       messages: prev.messages.map((m) => {
         if (m.id === msgId) {
-          if (m.secretPin === enteredPin || enteredPin === '1234') {
+          if (m.secretPin === enteredPin) {
             succeeded = true;
             return { ...m, isUnlocked: true };
           }
@@ -168,6 +177,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0d0e12] text-[#e5dbca] flex flex-col justify-between selection:bg-[#caa04b]/30">
+      {saveError && (
+        <div className="bg-[#3b1717] border-b border-red-800 text-red-200 text-xs font-mono px-4 py-2 text-center">
+          ⚠ {saveError}
+        </div>
+      )}
+
       {/* Top Bar Contract: 3 zones */}
       <header className="sticky top-0 z-40 bg-[#12141a]/90 backdrop-blur-md border-b border-[#2d251a] px-4 sm:px-6 py-3.5">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">

@@ -67,6 +67,8 @@ export const DossierChatWiretap: React.FC<DossierChatWiretapProps> = ({
   const [superSecretPin, setSuperSecretPin] = useState('1234');
   const [isSettingSuperSecretPin, setIsSettingSuperSecretPin] = useState(false);
   const [isOtherTyping, setIsOtherTyping] = useState(false);
+  const [fileUploadError, setFileUploadError] = useState<string | null>(null);
+  const [pinEditDraft, setPinEditDraft] = useState('');
 
   // Final Step 5 (@final) summons state and confirmation
   const [showFinalConfirmModal, setShowFinalConfirmModal] = useState(false);
@@ -216,6 +218,15 @@ export const DossierChatWiretap: React.FC<DossierChatWiretapProps> = ({
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    const MAX_PHOTO_BYTES = 1.5 * 1024 * 1024; // 1.5MB
+    if (file.size > MAX_PHOTO_BYTES) {
+      setFileUploadError('Rasm juda katta (max 1.5MB). Iltimos kichikroq fotosurat tanlang.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+    setFileUploadError(null);
+
     noirAudio.playStamp();
     const reader = new FileReader();
     reader.onload = () => {
@@ -315,7 +326,7 @@ export const DossierChatWiretap: React.FC<DossierChatWiretapProps> = ({
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#181a24] border border-[#caa04b]/40 shrink-0 shadow-inner">
           <Radio className="w-3 h-3 text-[#caa04b] animate-pulse shrink-0" />
           <span className="font-case text-[10px] sm:text-xs tracking-wider text-[#d6b77c] font-bold whitespace-nowrap">
-            4-QADAM: TELEGRAF
+            5-QADAM: TELEGRAF
           </span>
         </div>
 
@@ -489,23 +500,63 @@ export const DossierChatWiretap: React.FC<DossierChatWiretapProps> = ({
 
         {/* Super Secret PIN indicator if active */}
         {selectedMode === 'super_secret' && (
-          <div className="flex items-center justify-between text-[10px] font-mono bg-red-950/40 border border-red-800/40 px-2 py-1 rounded text-red-200">
-            <div className="flex items-center gap-1.5">
-              <KeyRound className="w-3 h-3 text-red-400" />
-              <span>PIN o&apos;rnatildi: <b>{superSecretPin}</b></span>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                const nextPin = prompt('Yangi 4 xonali PIN kiriting:', superSecretPin);
-                if (nextPin && nextPin.length >= 4) {
-                  setSuperSecretPin(nextPin);
-                }
-              }}
-              className="underline text-red-300 hover:text-white cursor-pointer"
-            >
-              O&apos;zgartirish
-            </button>
+          <div className="flex items-center justify-between text-[10px] font-mono bg-red-950/40 border border-red-800/40 px-2 py-1 rounded text-red-200 gap-2">
+            {!isSettingSuperSecretPin ? (
+              <>
+                <div className="flex items-center gap-1.5">
+                  <KeyRound className="w-3 h-3 text-red-400" />
+                  <span>PIN o&apos;rnatildi: <b>{superSecretPin}</b></span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPinEditDraft(superSecretPin);
+                    setIsSettingSuperSecretPin(true);
+                  }}
+                  className="underline text-red-300 hover:text-white cursor-pointer shrink-0"
+                >
+                  O&apos;zgartirish
+                </button>
+              </>
+            ) : (
+              <form
+                className="flex items-center gap-1.5 w-full"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const cleaned = pinEditDraft.trim();
+                  if (cleaned.length >= 4) {
+                    setSuperSecretPin(cleaned);
+                    setIsSettingSuperSecretPin(false);
+                  }
+                }}
+              >
+                <KeyRound className="w-3 h-3 text-red-400 shrink-0" />
+                <input
+                  autoFocus
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={8}
+                  value={pinEditDraft}
+                  onChange={(e) => setPinEditDraft(e.target.value)}
+                  placeholder="Yangi PIN (kamida 4 ta belgi)"
+                  className="flex-1 min-w-0 bg-[#1b1010] border border-red-700/60 rounded px-1.5 py-0.5 text-red-100 placeholder-red-400/40 focus:outline-hidden"
+                />
+                <button
+                  type="submit"
+                  disabled={pinEditDraft.trim().length < 4}
+                  className="text-emerald-300 hover:text-emerald-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shrink-0"
+                >
+                  Saqlash
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsSettingSuperSecretPin(false)}
+                  className="text-red-300 hover:text-white cursor-pointer shrink-0"
+                >
+                  Bekor
+                </button>
+              </form>
+            )}
           </div>
         )}
 
@@ -605,6 +656,9 @@ export const DossierChatWiretap: React.FC<DossierChatWiretapProps> = ({
                     onChange={handleFileUpload}
                   />
                 </label>
+                {fileUploadError && (
+                  <p className="text-[10px] font-mono text-red-300 px-1 -mt-1">{fileUploadError}</p>
+                )}
 
                 {/* Option 1b: Arxiv Maxfiy Surati */}
                 <button

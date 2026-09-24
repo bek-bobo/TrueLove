@@ -198,6 +198,23 @@
   animation: inkStampSlam 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
 }
 
+/* Step/Panel Fade-In (was referenced across the app as .animate-fadeIn but never
+   actually defined, so step transitions and this accordion silently had no animation) */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
 /* Incoming Message Smooth Slide-In Animation (0.3s pastdan tepaga qarab yumshoq harakat) */
 @keyframes messageSlideIn {
   0% {
@@ -225,4 +242,10 @@ body.dossier-touch-active {
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/legacy Edge */
+}
+
+.dossier-scroll-lock::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge (Chromium) */
 }

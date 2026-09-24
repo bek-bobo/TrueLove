@@ -120,7 +120,7 @@ export const DossierVerdict: React.FC<DossierVerdictProps> = ({
         </button>
 
         <span className="font-case text-xs tracking-[0.2em] text-[#d6b77c] font-bold">
-          5-QADAM: YAKUNIY HUKM
+          6-QADAM: YAKUNIY HUKM
         </span>
 
         <button
@@ -134,7 +134,7 @@ export const DossierVerdict: React.FC<DossierVerdictProps> = ({
       </div>
 
       {/* Middle Content */}
-      <div className="relative my-2.5 flex-1 overflow-y-auto pr-1 flex flex-col gap-3.5">
+      <div className="relative my-2.5 flex-1 overflow-y-auto pr-1 flex flex-col gap-3.5 dossier-scroll-lock">
         {/* Dossier Closure Summary Card */}
         <div className="texture-aged-paper p-4 rounded-xl border border-[#9b8564] shadow-md relative overflow-hidden">
           <div className="flex items-center justify-between gap-2 mb-2">

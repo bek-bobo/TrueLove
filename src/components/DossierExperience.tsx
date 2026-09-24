@@ -80,8 +80,13 @@ export const DossierExperience: React.FC<DossierExperienceProps> = ({
   const [isJazzActive, setIsJazzActive] = useState(noirAudio.isJazzActive());
   const [isCandleActive, setIsCandleActive] = useState(false);
 
-  // Passive touch scroll-locking to prevent parent page from jumping or scrolling on touch devices
-  const touchLockRef = useTouchScrollLock<HTMLDivElement>(true);
+  // Custom JS touch-lock butunlay o'chirildi — barcha ekranlarda (shu
+  // jumladan Timeline/Letter/Chat/Verdict) endi scroll 100% brauzerning
+  // o'z tabiiy mexanizmi orqali ishlaydi. Ichki ro'yxatlar oxiriga
+  // yetganda tashqi sahifa "sakramasligi" esa CSS'dagi
+  // "overscroll-behavior: contain" (.dossier-scroll-lock klassi,
+  // src/index.css) orqali JS'siz ta'minlanadi — bu ancha ishonchli.
+  const touchLockRef = useTouchScrollLock<HTMLDivElement>(false);
 
   // Sync state whenever active dossier changes
   React.useEffect(() => {

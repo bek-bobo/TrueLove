@@ -17,6 +17,9 @@ import {
   Newspaper,
   Shield,
   Sparkles,
+  ChevronDown,
+  ChevronUp,
+  FileStack,
 } from 'lucide-react';
 
 interface DossierLetterProps {
@@ -42,6 +45,9 @@ export const DossierLetter: React.FC<DossierLetterProps> = ({
   onToggleWatermark,
   activeRole,
 }) => {
+  const [isEvidenceExpanded, setIsEvidenceExpanded] = useState(false);
+  const evidenceItemCount = 2 + (dossier.hasAudioCassette ? 1 : 0);
+
   const letterFontClass =
     fontMode === 'handwritten_ink'
       ? 'font-handwritten-ink text-base sm:text-lg leading-relaxed text-[#2c1d11]'
@@ -66,7 +72,7 @@ export const DossierLetter: React.FC<DossierLetterProps> = ({
         </button>
 
         <span className="font-case text-xs tracking-[0.25em] text-[#d6b77c] font-bold">
-          3-QADAM: MAKTUB
+          4-QADAM: MAKTUB
         </span>
 
         {/* Font Mode & Anti-Screenshot Watermark */}
@@ -204,34 +210,61 @@ export const DossierLetter: React.FC<DossierLetterProps> = ({
           </div>
         </div>
 
-        {/* Gugurt Alangasi (Invisible Ink / Simulated Match Flame) */}
-        <div className="px-0.5">
-          <MatchFlameHeatScrap
-            hiddenSecretText={
-              dossier.secretMatchNote ||
-              '«Seni hech qachon unutmaganman. Bu xat tasodif emas edi.»'
-            }
-          />
-        </div>
+        {/* Qo'shimcha Dalillar: accordion — sahifa ochilganda faqat asosiy xat
+            ko'rinadi, qo'shimcha widget'lar so'rab olinganda ochiladi */}
+        <div className="pt-1">
+          <button
+            type="button"
+            onClick={() => {
+              noirAudio.playPaperRustle();
+              setIsEvidenceExpanded((prev) => !prev);
+            }}
+            aria-expanded={isEvidenceExpanded}
+            className="w-full flex items-center gap-2 px-0.5 py-1 cursor-pointer group"
+          >
+            <div className="h-px flex-1 bg-[#30281c] group-hover:bg-[#4a3f2a] transition-colors" />
+            <span className="text-[10px] font-mono tracking-[0.2em] text-[#8a7d68] group-hover:text-[#c4b69f] uppercase whitespace-nowrap flex items-center gap-1.5 transition-colors">
+              <FileStack className="w-3 h-3" />
+              Qo&apos;shimcha Dalillar ({evidenceItemCount})
+              {isEvidenceExpanded ? (
+                <ChevronUp className="w-3 h-3" />
+              ) : (
+                <ChevronDown className="w-3 h-3" />
+              )}
+            </span>
+            <div className="h-px flex-1 bg-[#30281c] group-hover:bg-[#4a3f2a] transition-colors" />
+          </button>
 
-        {/* Audio Cassette Player (Voice Evidence) if enabled */}
-        {dossier.hasAudioCassette && (
-          <div className="px-0.5">
-            <AudioCassettePlayer
-              title={dossier.cassetteTitle || 'FONOGRAMMA #05 // OVOZLI DALIL'}
-              authorName="Muallif (Anonim)"
-              duration={28}
-            />
-          </div>
-        )}
+          {isEvidenceExpanded && (
+            <div className="flex flex-col gap-3 mt-2.5 animate-fadeIn">
+              <div className="px-0.5">
+                <MatchFlameHeatScrap
+                  hiddenSecretText={
+                    dossier.secretMatchNote ||
+                    '«Seni hech qachon unutmaganman. Bu xat tasodif emas edi.»'
+                  }
+                />
+              </div>
 
-        {/* 📜 Yirtib olinadigan Vintage Chipta (Perforated Tear-off Ticket) */}
-        <div className="px-0.5">
-          <PerforatedTicket
-            title="MAXFIY TAKLIFNOMA: 2 KISHILIK QAHVA YOKI KECHKI OVQAT"
-            subtitle="Ushbu chipta istalgan paytda kofe yoki kechki ovqat uchun amal qiladi"
-            ticketNumber="NOIR-TICKET #05-VIP"
-          />
+              {dossier.hasAudioCassette && (
+                <div className="px-0.5">
+                  <AudioCassettePlayer
+                    title={dossier.cassetteTitle || 'FONOGRAMMA #05 // ATMOSFERA MIKSI'}
+                    authorName="Fon effekti (Jazz + Yomg'ir)"
+                    duration={28}
+                  />
+                </div>
+              )}
+
+              <div className="px-0.5">
+                <PerforatedTicket
+                  title="MAXFIY TAKLIFNOMA: 2 KISHILIK QAHVA YOKI KECHKI OVQAT"
+                  subtitle="Ushbu chipta istalgan paytda kofe yoki kechki ovqat uchun amal qiladi"
+                  ticketNumber="NOIR-TICKET #05-VIP"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Rubber Stamp Applicator Toolbox */}

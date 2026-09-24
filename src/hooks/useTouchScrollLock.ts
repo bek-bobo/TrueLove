@@ -52,16 +52,12 @@ export function useTouchScrollLock<T extends HTMLElement = HTMLDivElement>(isAct
         target = target.parentElement;
       }
 
-      // 1. If user is touching non-scrollable dossier elements (cards, buttons, interactive tools, stamps)
-      // prevent the outer window from jumping/scrolling
+      // 1. If the touch is on a non-scrollable element (cards, buttons, interactive tools, stamps)
+      // and there is no scrollable descendant nearby, let the browser handle it natively.
+      // Previously this called e.preventDefault() unconditionally here, which froze the
+      // ENTIRE page on mobile whenever a step (e.g. Cover / Clearance) had no inner
+      // overflow-y-auto container of its own — that was the mobile "stuck scroll" bug.
       if (!scrollableElement) {
-        // Exception: allow default for form elements like text inputs or textareas if needed
-        const tagName = (e.target as HTMLElement)?.tagName?.toLowerCase();
-        if (tagName !== 'input' && tagName !== 'textarea') {
-          if (e.cancelable) {
-            e.preventDefault();
-          }
-        }
         return;
       }
 
